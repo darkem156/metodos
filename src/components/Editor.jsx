@@ -15,7 +15,7 @@ export default function Editor({ setFunc }) {
   }
 
   return (
-    <div>
+    <div id="editor-container">
       <EditableMathField
         latex={latex}
         onChange={(mathField) => {

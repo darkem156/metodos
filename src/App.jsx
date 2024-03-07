@@ -16,12 +16,14 @@ function App() {
   return (
     <>
       <Editor setFunc={setFunc} />
-      {selection === -1 ? methods.map((method, index) => <div key={method.name}>
-        <button type="" onClick={() => setSelection(index)}>{method.name}</button>
-      </div>) : <div>
-        <button onClick={() => setSelection(-1)}>Volver al menú</button>
-        <Method params={params} setParams={setParams} method={methods[selection]} func={func} />
-      </div>}
+      <div id="method">
+        {selection === -1 ? methods.map((method, index) => <div key={method.name}>
+          <button type="" onClick={() => setSelection(index)}>{method.name}</button>
+        </div>) : <div>
+          <button onClick={() => setSelection(-1)}>Volver al menú</button>
+          <Method params={params} setParams={setParams} method={methods[selection]} func={func} />
+        </div>}
+      </div>
     </>
   )
 }
