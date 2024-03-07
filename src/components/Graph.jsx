@@ -11,7 +11,7 @@ export default function Graph({ func }) {
 
   useEffect(() => {
     const x = [];
-    for (let i = -10; i <= 10; i += 0.1) {
+    for (let i = -2; i <= 2; i += 0.1) {
       x.push(i);
     }
 
@@ -19,6 +19,7 @@ export default function Graph({ func }) {
 
     setXValues(x);
     setYValues(y);
+    console.log(func)
   }, [func]);
 
   const data = [

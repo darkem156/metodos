@@ -5,7 +5,7 @@ import { fromLatex, calculateFromText } from '../utils/math.js'
 addStyles()
 
 export default function Editor({ setFunc }) {
-  const [latex, setLatex] = useState('\\frac{1}{\\sqrt{2}}\\cdot2^{x+1}')
+  const [latex, setLatex] = useState('e^{-x}-x')
   const [result, setResult] = useState(0)
 
   const calculate = () => {
@@ -22,9 +22,7 @@ export default function Editor({ setFunc }) {
           setLatex(mathField.latex())
         }}
       />
-      <p>{latex}</p>
-      <button type="" onClick={() => calculate()}>Test</button>
-      <p>{result}</p>
+      <button type="" onClick={() => setFunc(fromLatex(latex))}>Enter</button>
     </div>
   )
 }
