@@ -8,7 +8,9 @@ export default function Method({ method, func, params, setParams }) {
   let rows = []
 
   useEffect(() => {
-    if(params.e) calculate()
+    let all = true
+    method.params.map(param => all = all ? (params[param] ? true : false) : false)
+    if(all) calculate()
   }, [params])
 
   const calculate = () => {
@@ -48,21 +50,26 @@ export default function Method({ method, func, params, setParams }) {
           </div> : null)}
       </div>
       <button type="button" onClick={() => {
-        setParams({...handleParams, f: func})
+        let all = true
+        method.params.map(param => all = all ? (params[param] ? true : false) : false)
+        if(all) setParams({...handleParams, f: func})
+        else alert('Se deben ingresar todos los parámetros')
       }}>Calcular</button>
-      <table>
-        <thead>
-          <tr>
-            {method.columns.map(column => <th key={column}>{column}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {results.map(result => <tr key={result.e+Math.random()}>
-              { method.columns.map(column => <td key={result.e+Math.random()}>{result[column]}</td>) }
-            </tr>)
-          }
-        </tbody>
-      </table>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              {method.columns.map(column => <th key={column}>{column}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {results.map(result => <tr key={result.e+Math.random()}>
+                { method.columns.map(column => <td key={result.e+Math.random()}>{result[column]}</td>) }
+              </tr>)
+            }
+          </tbody>
+        </table>
+      </div>
       { finalResult ? <p>Aproximación final: {finalResult}</p> : <></> }
       <Graph func={func} />
     </>

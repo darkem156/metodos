@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import createPlotlyComponent from 'react-plotlyjs';
 import Plotly from 'plotly.js/dist/plotly-cartesian';
-import * as math from 'mathjs'
+import { create, all } from 'mathjs';
+const math = create(all)
+math.import({ln: math.log})
 
 const PlotlyComponent = createPlotlyComponent(Plotly);
 
@@ -34,7 +36,7 @@ export default function Graph({ func }) {
     },
   ];
   const layout = {                     // all "layout" attributes: #layout
-    title: 'simple example',  // more about "layout.title": #layout-title
+    title: '',  // more about "layout.title": #layout-title
     xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
       title: 'y'         // more about "layout.xaxis.title": #layout-xaxis-title
     },

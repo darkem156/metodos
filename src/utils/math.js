@@ -1,4 +1,6 @@
-import * as math from 'mathjs';
+import { create, all } from 'mathjs';
+const math = create(all)
+math.import({ln: math.log})
 
 export const methods = [
   {
@@ -17,24 +19,35 @@ export const methods = [
       'fxi',
       'e'
     ],
-    func: ({ f, ai, bi, xi }) => {
-      const xi1 = (ai+bi)/2
+    func: ({ f, ai, bi, ai1, bi1 }) => {
+      let first = false
+      if(!ai1) {
+        ai1 = ai
+        bi1 = bi
+        first = true
+      }
+      const xi1 = (ai1+bi1)/2
       const fxi = math.evaluate(f, {x:xi1})
       if(fxi === 0) return { ai, bi, xi: xi1, fxi, e: 0, result: xi1 }
-      const fai = math.evaluate(f, {x:ai})
-      const fbi = math.evaluate(f, {x:bi})
-      const e = (bi-ai)/2 * 100
-      if(!xi) return {ai, bi, xi: xi1, fxi, e, result: xi1}
+      const fai = math.evaluate(f, {x:ai1})
+      const fbi = math.evaluate(f, {x:bi1})
+      const e = (bi1-ai1)/2 * 100
+      const ai0 = ai1
+      const bi0 = bi1
+
       if(fxi > 0) {
-        if(fai > 0) ai = xi1
-        else if(fbi > 0) bi = xi1
+        if(fai > 0) ai1 = xi1
+        else if(fbi > 0) bi1 = xi1
       }
       else if(fxi < 0) {
-        if(fai < 0) ai = xi1
-        else if(fbi < 0) bi = xi1
+        if(fai < 0) ai1 = xi1
+        else if(fbi < 0) bi1 = xi1
       }
 
-      return {ai, bi, xi: xi1, fxi, e, result: xi1}
+      if(first) {
+        return {ai, bi, ai1, bi1, xi: xi1, fxi, e, result: xi1}
+      }
+      return {ai: ai0, bi: bi0, ai1, bi1, xi: xi1, fxi, e, result: xi1}
     }
   },
   {
@@ -55,12 +68,12 @@ export const methods = [
       'fxi1',
       'e'
     ],
-    func: ({ f, ai, bi, xi, F, G, bi1, ai1 }) => {
+    func: ({ f, ai, bi, xi, F0, G0, F1, G1, bi1, ai1 }) => {
       if(!xi) xi = ai
       ai = ai1 ? ai1 : ai
       bi = bi1 ? bi1 : bi
-      F = F ? F : math.evaluate(f, {x:ai})
-      G = G ? G : math.evaluate(f, {x:bi})
+      let F = F1 ? F1 : math.evaluate(f, {x:ai})
+      let G = G1 ? G1 : math.evaluate(f, {x:bi})
 
       const fxi = math.evaluate(f, { x: xi })
 
@@ -72,6 +85,8 @@ export const methods = [
       const e = ((xi1-xi)/(xi+1)) * 100
 
       //if(!xi) return {ai, bi, xi: xi1, fxi, e, result: xi1}
+      F0 = F
+      G0 = G
       if(F*fxi1 < 0) {
         bi1 = xi1
         G = fxi1
@@ -88,9 +103,39 @@ export const methods = [
         }
       }
 
-      return {ai, bi, ai1, bi1, xi: xi1, fxi1, e, G, F, result: xi1}
+      return {ai, bi, ai1, bi1, xi: xi1, fxi1, e, G: G0, F: F0, G1: G, F1: F, result: xi1}
     }
   },
+  {
+    name: 'Método de Newton Rapson',
+    params: [
+      'f',
+      'xi',
+      'e',
+    ],
+    columns: [
+      'i',
+      'xi',
+      'fxi',
+      "dfxi",
+      'xi1',
+      'e'
+    ],
+    func: ({ f, df, xi, xi0, xi1 }) => {
+      if(!xi1) xi1 = xi
+      if(!df) df = math.derivative(f, 'x')
+      const fxi = math.evaluate(f, {x: xi1})
+      const dfxi = df.evaluate({x: xi1})
+
+      xi0 = xi1
+
+      xi1 = xi1 - (fxi/dfxi)
+
+      const e = (xi1 - xi0)/(xi1)*100
+
+      return { df, dfxi, xi: xi0, fxi, xi1, e, result: xi1 }
+    }
+  }
 ]
 
 export function fromLatex(latex) {
@@ -102,6 +147,9 @@ export function fromLatex(latex) {
   text = text.replace(/\\cdot/g, '*');
   text = text.replaceAll('\\left(', '(')
   text = text.replaceAll('\\right)', ')')
+  .replaceAll('\\pi', 'pi')
+  .replaceAll('\\cos', 'cos')
+  .replaceAll('\\ln', 'ln')
 
   text = text.replace(/{([^{}]+)}/g, '($1)');
 
