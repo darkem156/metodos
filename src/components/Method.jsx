@@ -9,7 +9,7 @@ export default function Method({ method, func, params, setParams }) {
 
   useEffect(() => {
     let all = true
-    method.params.map(param => all = all ? (params[param] ? true : false) : false)
+    method.params.map(param => all = all ? (handleParams[param] ? true : false) : false)
     if(all) calculate()
   }, [params])
 
@@ -51,11 +51,11 @@ export default function Method({ method, func, params, setParams }) {
       </div>
       <button type="button" onClick={() => {
         let all = true
-        method.params.map(param => all = all ? (params[param] ? true : false) : false)
+        method.params.map(param => all = all ? (handleParams[param] ? true : false) : false)
         if(all) setParams({...handleParams, f: func})
         else alert('Se deben ingresar todos los parámetros')
       }}>Calcular</button>
-      <div>
+      <div id="table-container">
         <table>
           <thead>
             <tr>

@@ -135,6 +135,33 @@ export const methods = [
 
       return { df, dfxi, xi: xi0, fxi, xi1, e, result: xi1 }
     }
+  },
+  {
+    name: 'Método de la Secante',
+    params: [
+      'f',
+      'x0',
+      'x1',
+      'e'
+    ],
+    columns: [
+      'i',
+      'xi0',
+      'xi',
+      "fxi0",
+      'fxi',
+      'xi1',
+      'e'
+    ],
+    func: ({ f, x0, x1 }) => {
+      const fx0 = math.evaluate(f, { x: x0 })
+      const fxi = math.evaluate(f, { x: x1 })
+      const xi1 = x1 - ((fxi)*(x0-x1))/(fx0-(fxi))
+      const e = (xi1-x1)/xi1*100
+
+      return { f, xi0: x0, xi: x1, fxi0: fx0, fxi, xi1, x0:x1, x1: xi1, e }
+      //return { df, dfxi, xi: xi0, fxi, xi1, e, result: xi1 }
+    }
   }
 ]
 
@@ -152,6 +179,7 @@ export function fromLatex(latex) {
   .replaceAll('\\ln', 'ln')
 
   text = text.replace(/{([^{}]+)}/g, '($1)');
+  text = text.replaceAll('\\', '');
 
   return text
 }
