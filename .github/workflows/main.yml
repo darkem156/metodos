@@ -1,0 +1,25 @@
+name: Main Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  avoid_reduncy:
+    runs-on: ubuntu-20.04
+    steps: 
+    - uses: styfle/cancel-workflow-action@0.9.1
+
+  gh_deploy:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        npm ci
+        npm run build
+    - name: Deploy to GH Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: dist
