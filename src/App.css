@@ -95,3 +95,7 @@ th {
   background: #444;
   color: #fff;
 }
+
+.flex {
+  display: flex;
+}

@@ -162,6 +162,17 @@ export const methods = [
       return { f, xi0: x0, xi: x1, fxi0: fx0, fxi, xi1, x0:x1, x1: xi1, e }
       //return { df, dfxi, xi: xi0, fxi, xi1, e, result: xi1 }
     }
+  },
+  {
+    name: 'Método de Gauss-Seidel',
+    params: [
+      'x1',
+      'x2',
+      'x3',
+    ],
+    columns: [
+      'i'
+    ]
   }
 ]
 
