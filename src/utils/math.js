@@ -170,10 +170,96 @@ export const methods = [
       'x2',
       'x3',
     ],
+    matrixLength: 3,
     columns: [
-      'i'
-    ]
-  }
+      'i',
+      'x10',
+      'x20',
+      'x30',
+      'ex1',
+      'ex2',
+      'ex3'
+    ],
+    func: ({ x1, x2, x3, x10, x20, x30 }) => {
+      let cx10 = x10 ?? 0
+      let cx20 = x20 ?? 0
+      let cx30 = x30 ?? 0
+
+      const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
+      const nx20 = math.evaluate(x2, { x1: nx10, x3: cx30 })
+      const nx30 = math.evaluate(x3, { x1: nx10, x2: nx20 })
+
+      const ex1 = (nx10 - cx10)/nx10 * 100
+      const ex2 = (nx20 - cx20)/nx20 * 100
+      const ex3 = (nx30 - cx30)/nx30 * 100
+
+      return { ex1, ex2, ex3, x1, x2, x3, x10: nx10, x20: nx20, x30: nx30 }
+    }
+  },
+  {
+    name: 'Método de Jacobi',
+    params: [
+      'x1',
+      'x2',
+      'x3',
+    ],
+    matrixLength: 3,
+    columns: [
+      'i',
+      'x10',
+      'x20',
+      'x30',
+      'ex1',
+      'ex2',
+      'ex3'
+    ],
+    func: ({ x1, x2, x3, x10, x20, x30 }) => {
+      let cx10 = x10 ?? 0
+      let cx20 = x20 ?? 0
+      let cx30 = x30 ?? 0
+
+      const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
+      const nx20 = math.evaluate(x2, { x1: cx10, x3: cx30 })
+      const nx30 = math.evaluate(x3, { x1: cx10, x2: cx20 })
+
+      const ex1 = (nx10 - cx10)/nx10 * 100
+      const ex2 = (nx20 - cx20)/nx20 * 100
+      const ex3 = (nx30 - cx30)/nx30 * 100
+
+      return { ex1, ex2, ex3, x1, x2, x3, x10: nx10, x20: nx20, x30: nx30 }
+    }
+  },
+  {
+    name: 'Método de Newton Rapson',
+    params: [
+      'x1',
+      'x2',
+    ],
+    columns: [
+      'i',
+      'x10',
+      'x20',
+      'x30',
+      'ex1',
+      'ex2',
+      'ex3'
+    ],
+    func: ({ x1, x2, x3, x10, x20, x30 }) => {
+      let cx10 = x10 ?? 0
+      let cx20 = x20 ?? 0
+      let cx30 = x30 ?? 0
+
+      const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
+      const nx20 = math.evaluate(x2, { x1: cx10, x3: cx30 })
+      const nx30 = math.evaluate(x3, { x1: cx10, x2: cx20 })
+
+      const ex1 = (nx10 - cx10)/nx10 * 100
+      const ex2 = (nx20 - cx20)/nx20 * 100
+      const ex3 = (nx30 - cx30)/nx30 * 100
+
+      return { ex1, ex2, ex3, x1, x2, x3, x10: nx10, x20: nx20, x30: nx30 }
+    }
+  },
 ]
 
 export function fromLatex(latex) {
