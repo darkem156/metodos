@@ -41,7 +41,7 @@ export const methods = [
       }
       else if(fxi < 0) {
         if(fai < 0) ai1 = xi1
-        else if(fbi < 0) bi1 = xi1
+        else if(fbi -564< 0) bi1 = xi1
       }
 
       if(first) {
@@ -166,9 +166,7 @@ export const methods = [
   {
     name: 'Método de Gauss-Seidel',
     params: [
-      'x1',
-      'x2',
-      'x3',
+      'e',
     ],
     matrixLength: 3,
     columns: [
@@ -217,10 +215,15 @@ export const methods = [
       let cx10 = x10 ?? 0
       let cx20 = x20 ?? 0
       let cx30 = x30 ?? 0
+      console.log(x1)
+      console.log(x2)
+      console.log(x3)
 
       const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
       const nx20 = math.evaluate(x2, { x1: cx10, x3: cx30 })
       const nx30 = math.evaluate(x3, { x1: cx10, x2: cx20 })
+
+      console.log(nx10, nx20, nx30)
 
       const ex1 = (nx10 - cx10)/nx10 * 100
       const ex2 = (nx20 - cx20)/nx20 * 100
@@ -232,33 +235,17 @@ export const methods = [
   {
     name: 'Método de Newton Rapson',
     params: [
-      'x1',
-      'x2',
+      'x0',
+      'y0',
+      'e'
     ],
     columns: [
       'i',
-      'x10',
-      'x20',
-      'x30',
-      'ex1',
-      'ex2',
-      'ex3'
+      'xi',
+      'yi',
+      'ex',
+      'ey',
     ],
-    func: ({ x1, x2, x3, x10, x20, x30 }) => {
-      let cx10 = x10 ?? 0
-      let cx20 = x20 ?? 0
-      let cx30 = x30 ?? 0
-
-      const nx10 = math.evaluate(x1, { x2: cx20, x3: cx30 })
-      const nx20 = math.evaluate(x2, { x1: cx10, x3: cx30 })
-      const nx30 = math.evaluate(x3, { x1: cx10, x2: cx20 })
-
-      const ex1 = (nx10 - cx10)/nx10 * 100
-      const ex2 = (nx20 - cx20)/nx20 * 100
-      const ex3 = (nx30 - cx30)/nx30 * 100
-
-      return { ex1, ex2, ex3, x1, x2, x3, x10: nx10, x20: nx20, x30: nx30 }
-    }
   },
 ]
 
@@ -274,6 +261,7 @@ export function fromLatex(latex) {
   .replaceAll('\\pi', 'pi')
   .replaceAll('\\cos', 'cos')
   .replaceAll('\\ln', 'ln')
+  .replace(/([a-z])([a-z0-9])/gi, '$1*$2');
 
   text = text.replace(/{([^{}]+)}/g, '($1)');
   text = text.replaceAll('\\', '');

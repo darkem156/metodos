@@ -7,7 +7,7 @@ import SystemMethod from './components/SystemMethod.jsx'
 import NewtonRapsomSystem from './components/NewtonRapsomSystem.jsx'
 
 function App() {
-  const [func, setFunc] = useState('(e^(-x))-x')
+  const [func, setFunc] = useState('(e^(-x))-x,x^2')
   const [selection, setSelection] = useState(-1)
   const [params, setParams] = useState({})
 

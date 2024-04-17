@@ -4,6 +4,7 @@ const math = create(all)
 math.import({ln: math.log})
 
 export default function SystemMethod({ method, params, setParams }) {
+  const [handleParams, setHandleParams] = useState(params)
   const [matrix1, setMatrix1] = useState([[],[],[]])
   const [results, setResults] = useState([])
   const [finalResult, setFinalResult] = useState(false)
@@ -15,9 +16,9 @@ export default function SystemMethod({ method, params, setParams }) {
   }
 
   function order() {
-    let ordered = matrix1.sort((a, b) => a[0] < b[0] ? 1 : -1)
+    let ordered = matrix1.sort((a, b) => Math.abs(a[0]) < Math.abs(b[0]) ? 1 : -1)
     const row1 = ordered[0]
-    ordered = ordered.slice(1).sort((a, b) => a[1] < b[1] ? 1 : -1)
+    ordered = ordered.slice(1).sort((a, b) => Math.abs(a[1]) < Math.abs(b[1]) ? 1 : -1)
     const row2 = ordered[0]
     const row3 = ordered[1]
 
@@ -25,13 +26,11 @@ export default function SystemMethod({ method, params, setParams }) {
   }
 
   function calculate() {
-    params.ex1 = 0.1
-    params.ex2 = 0.1
-    params.ex3 = 0.1
     const ordered = order()
-    const x1 = `(${ordered[0][3]} - (${ordered[0][1]}x2) - (${ordered[0][2]}x3))/${ordered[0][0]}`
-    const x2 = `(${ordered[1][3]} - (${ordered[1][0]}x1) - (${ordered[1][2]}x3))/${ordered[1][1]}`
-    const x3 = `(${ordered[2][3]} - (${ordered[2][0]}x1) - (${ordered[2][1]}x2))/${ordered[2][2]}`
+    console.log(ordered)
+    const x1 = `(${ordered[0][3]} + (${ordered[0][1]*-1}x2) + (${ordered[0][2]*-1}x3))/${ordered[0][0]}`
+    const x2 = `(${ordered[1][3]} + (${ordered[1][0]*-1}x1) + (${ordered[1][2]*-1}x3))/${ordered[1][1]}`
+    const x3 = `(${ordered[2][3]} + (${ordered[2][0]*-1}x1) + (${ordered[2][1]*-1}x2))/${ordered[2][2]}`
     //console.log(math.derivative('2x+2x*y', 'x').toString())
     //params = {...params, x1, x2, x3}
     params.x1 = x1
@@ -47,7 +46,7 @@ export default function SystemMethod({ method, params, setParams }) {
     }
     if(rows.length > 100) return
     const last = rows[rows.length-1]
-    if(Math.abs(last.ex1) > Math.abs(params.ex1) || Math.abs(last.ex2) > Math.abs(params.ex2) || Math.abs(last.ex3) > Math.abs(params.ex3)) {
+    if(Math.abs(last.ex1) > Math.abs(params.e) || Math.abs(last.ex2) > Math.abs(params.e) || Math.abs(last.ex3) > Math.abs(params.e)) {
       const newData = {...method.func({...last, e:params.e, f: params.f}), i: rows.length}
       rows.push(newData)
       return calculate()
@@ -58,9 +57,20 @@ export default function SystemMethod({ method, params, setParams }) {
     }
   }
 
+  const handleChange = (e) => {
+    const { value } = e.target
+    setHandleParams({...handleParams, [e.target.id]: Number(value) || value})
+    console.log(value)
+  }
+
   return(
     <>
-      <h1>System Method</h1>
+      <div>
+        {method.params.map(param => param !== "f" ? <div key={param}>
+            <label htmlFor={param}>{param}</label>
+            <input onChange={handleChange} id={param} type="text" name="" value={handleParams[param]?.toString() || ""} />
+          </div> : null)}
+      </div>
       <div>
         { Array(method.matrixLength).fill(0).map((row, i) => {
           return(
