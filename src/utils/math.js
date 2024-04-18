@@ -197,9 +197,7 @@ export const methods = [
   {
     name: 'Método de Jacobi',
     params: [
-      'x1',
-      'x2',
-      'x3',
+      'e'
     ],
     matrixLength: 3,
     columns: [

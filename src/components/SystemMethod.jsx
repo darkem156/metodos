@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { create, all } from 'mathjs';
 const math = create(all)
 math.import({ln: math.log})
@@ -36,6 +36,7 @@ export default function SystemMethod({ method, params, setParams }) {
     params.x1 = x1
     params.x2 = x2
     params.x3 = x3
+    console.log(params.e)
 
     if (rows.length == 0) {
       console.log(params)
@@ -79,7 +80,7 @@ export default function SystemMethod({ method, params, setParams }) {
                 if(j < method.matrixLength-1) {
                   return(
                     <div key={i+j}>
-                      <input type="number" step="1" name="" value={matrix1[i][j]} onChange={ e => onChange(e, matrix1[i], j) } />
+                      <input type="number" name="" value={matrix1[i][j]} onChange={ e => onChange(e, matrix1[i], j) } />
                       <span>x{j+1}+</span>
                     </div>
                   )
@@ -88,11 +89,11 @@ export default function SystemMethod({ method, params, setParams }) {
                   return(
                     <>
                       <div key={i+j}>
-                        <input type="number" step="1" name="" value={matrix1[i][j]} onChange={ e => onChange(e, matrix1[i], j) } />
+                        <input type="number" name="" value={matrix1[i][j]} onChange={ e => onChange(e, matrix1[i], j) } />
                         <span>x{j+1}=</span>
                       </div>
                       <div>
-                        <input type="number" step="1" name="" value={matrix1[i][j+1]} onChange={ e => onChange(e, matrix1[i], j+1) } />
+                        <input type="number" name="" value={matrix1[i][j+1]} onChange={ e => onChange(e, matrix1[i], j+1) } />
                       </div>
                     </>
                   )
@@ -102,7 +103,15 @@ export default function SystemMethod({ method, params, setParams }) {
           )
         }) }
       </div>
-      <button type="" onClick={ e => calculate() }></button>
+      <button type="" onClick={ () => {
+        let all = true
+        method.params.map(param => all = all ? (handleParams[param] ? true : false) : false)
+        if(all) {
+          setParams({...handleParams})
+          calculate()
+        }
+        else alert('Se deben ingresar todos los parámetros')
+      } }></button>
       <div id="table-container">
         <table>
           <thead>
