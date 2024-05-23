@@ -164,6 +164,141 @@ export const methods = [
     }
   },
   {
+    name: 'Regla del Trapecio',
+    params: [
+      'b',
+      'a',
+      'n',
+      'r',
+    ],
+    columns: [
+      'segmentos',
+      'valor',
+      'error',
+    ],
+    func: ({ f, b, a, r, n, current_n }) => {
+      let ni = 2
+      if (current_n) ni = current_n
+      if (ni > n) ni = n
+      const h = (b-a)/ni
+      let sum = 0
+      const x0 = a
+      const xn = b
+      for (let i = 1; i < ni; i++) {
+        const xi = x0 + i*h
+        sum += math.evaluate(f, { x: xi })
+      }
+      sum *= 2
+      const fx0 = math.evaluate(f, { x:x0 })
+      const fxn = math.evaluate(f, { x:xn })
+      const I = (h/2)*(fx0+sum+fxn)
+      let e = 100
+      let error = (r - I)/r * 100
+      console.log(ni, n)
+      if (ni == n) {
+        e = 0
+      }
+      return { fx0: 0, fxi: 0, valor: I, error: error, e, b, a, r, n, current_n: ni+1, segmentos:ni }
+    },
+  },
+  {
+    name: 'Regla de Simpson 1/3',
+    params: [
+      'b',
+      'a',
+      'n',
+      'r',
+      'e'
+    ],
+    columns: [
+      'segmentos',
+      'valor',
+      'error',
+    ],
+    func: ({ f, b, a, r, n, current_n }) => {
+      console.log(f,b,a,r,n,current_n)
+      let ni = 2
+      if (current_n) ni = current_n
+      if (ni > n) ni = n
+      const h = (b-a)/ni
+      let sum = 0
+      const x0 = a
+      const xn = b
+      for (let i = 1; i < ni; i+=2) {
+        const xi = x0 + i*h
+        sum += 4*math.evaluate(f, { x: xi })
+      }
+      for (let i = 2; i < ni-1; i+=2) {
+        const xi = x0 + i*h
+        sum += 2*math.evaluate(f, { x: xi })
+      }
+      const fx0 = math.evaluate(f, { x:x0 })
+      const fxn = math.evaluate(f, { x:xn })
+      const I = (h/3)*(fx0+sum+fxn)
+      let e = 100
+      let error = (r - I)/r * 100
+      console.log(ni, n)
+      if (ni == n) {
+        e = 0
+      }
+      return { valor: I, error: error, e, b, a, r, n, current_n: ni+1, segmentos:ni }
+    }
+  },
+  {
+    name: 'Regla de Simpson 3/8',
+    params: [
+      'b',
+      'a',
+      'r',
+      'e'
+    ],
+    columns: [
+      'segmentos',
+      'valor',
+      'error',
+    ],
+    func: ({ f, b, a, r, n }) => {
+      const h = (b-a)/3
+      const x0 = a
+      const x1 = a+h
+      const x2 = a + 2*h
+      const x3 = b
+      const sum = math.evaluate(f, {x: x0}) + 3*math.evaluate(f, {x:x1}) + 3*math.evaluate(f, {x:x2}) + math.evaluate(f, {x:x3})
+      const I = (3*h/8)*sum
+
+      let error = (r - I)/r * 100
+      return { valor: I, error: error, e: 0, b, a, r, n }
+    }
+  },
+  {
+    name: 'Regla de Simpson segmentos impares',
+    params: [
+      'b',
+      'a',
+      'r',
+      'e',
+      'n'
+    ],
+    columns: [
+      's_1_3',
+      's_3_8',
+      'valor',
+      'error',
+    ],
+    func: ({ f, b, a, r, n }) => {
+      console.log(methods)
+      const func_1_3 = methods[7].func
+      const func_3_8 = methods[8].func
+      const h = (b-a)/n
+      const i1 = func_1_3({f, b:b-3*h, a, r, n:n-3})
+      const i2 = func_3_8({f, b, a:b-3*h, r, n:3})
+      const I = i1.valor + i2.valor
+
+      let error = (r - I)/r * 100
+      return { valor: I, s_1_3: i1.valor, s_3_8: i2.valor, error: error, e: 0, b, a, r, n }
+    }
+  },
+  {
     name: 'Método de Gauss-Seidel',
     params: [
       'e',

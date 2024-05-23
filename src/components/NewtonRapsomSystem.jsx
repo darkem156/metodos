@@ -91,7 +91,7 @@ export default function NewtonRapsomSystem({ method, func, params, setParams }) 
         method.params.map(param => all = all ? (handleParams[param] ? true : false) : false)
         if(all) setParams({...handleParams, f: func})
         else alert('Se deben ingresar todos los parámetros')
-      }}></button>
+      }}>Calcular</button>
       <div id="table-container">
         <table>
           <thead>

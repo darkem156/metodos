@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { create, all } from 'mathjs';
+import Graph from './Graph'
 const math = create(all)
 math.import({ln: math.log})
 
@@ -66,6 +67,7 @@ export default function SystemMethod({ method, params, setParams }) {
 
   return(
     <>
+      <h1>{method.name}</h1>
       <div>
         {method.params.map(param => param !== "f" ? <div key={param}>
             <label htmlFor={param}>{param}</label>
@@ -111,7 +113,7 @@ export default function SystemMethod({ method, params, setParams }) {
           calculate()
         }
         else alert('Se deben ingresar todos los parámetros')
-      } }></button>
+      } }>Calcular</button>
       <div id="table-container">
         <table>
           <thead>

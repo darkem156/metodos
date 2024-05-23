@@ -5,7 +5,7 @@ import { fromLatex, calculateFromText } from '../utils/math.js'
 addStyles()
 
 export default function Editor({ setFunc }) {
-  const [latex, setLatex] = useState('e^{-x}-x')
+  const [latex, setLatex] = useState('\\frac{1}{x}')
   const [result, setResult] = useState(0)
 
   const calculate = () => {
