@@ -202,7 +202,7 @@ export const methods = [
     },
   },
   {
-    name: 'Regla de Simpson 1/3',
+    name: 'Regla de Simpson 1/3 de aplicación múltiple',
     params: [
       'b',
       'a',
@@ -245,7 +245,7 @@ export const methods = [
     }
   },
   {
-    name: 'Regla de Simpson 3/8',
+    name: 'Regla de Simpson 3/8 de aplicación múltiple',
     params: [
       'b',
       'a',

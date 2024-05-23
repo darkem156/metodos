@@ -29,7 +29,7 @@ function App() {
               <button type="" onClick={()=>setSection(-1) & setSelection(-1)}>Atrás</button>
               {
                   selection === -1 ?
-                    section === 1 ? methods.slice(0,3).map((method, index) => <div key={method.name}>
+                    section === 1 ? methods.slice(0,4).map((method, index) => <div key={method.name}>
                         <button type="" onClick={() => setSelection(index)}>{method.name}</button>
                       </div>) 
                     : section === 2 ? methods.slice(8,11).map((method, index) => <div key={method.name}>
